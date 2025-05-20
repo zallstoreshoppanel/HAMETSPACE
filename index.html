@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Game Space Full Animation</title>
+<!-- Font Awesome CDN for gaming icons -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+  /* Reset & base */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body, html {
+    height: 100%;
+    background: #010517;
+    font-family: 'Orbitron', sans-serif;
+    overflow: hidden;
+    color: #00ffc8;
+  }
+
+  /* Loading Screen */
+  #loading-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #001529, #003f7d);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    user-select: none;
+  }
+
+  #loading-screen h1 {
+    font-size: 3.5rem;
+    letter-spacing: 8px;
+    color: #00ffc8;
+    margin-bottom: 40px;
+    position: relative;
+    animation: glitch 2s infinite;
+  }
+
+  @keyframes glitch {
+    0% {
+      text-shadow: 2px 0 #00ffc8, -2px 0 #00ffc8;
+    }
+    20% {
+      text-shadow: 4px 0 #00ffaa, -4px 0 #00ffaa;
+    }
+    40% {
+      text-shadow: 2px 0 #00ffc8, -2px 0 #00ffc8;
+    }
+    60% {
+      text-shadow: 6px 0 #00ffcc, -6px 0 #00ffcc;
+    }
+    80% {
+      text-shadow: 2px 0 #00ffc8, -2px 0 #00ffc8;
+    }
+    100% {
+      text-shadow: 0 0 #00ffc8;
+    }
+  }
+
+  /* Loading bar container */
+  #loading-bar-container {
+    width: 300px;
+    height: 12px;
+    background: #002b50;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 15px #00ffc8aa inset;
+  }
+
+  /* Loading bar */
+  #loading-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #00ffc8, #00a0ff);
+    border-radius: 12px;
+    animation: load 4s forwards;
+    box-shadow: 0 0 15px #00ffc8;
+  }
+
+  @keyframes load {
+    to {
+      width: 100%;
+    }
+  }
+
+  /* Main Content */
+  #main-content {
+    opacity: 0;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #001f33, #003355);
+    transition: opacity 1s ease;
+  }
+
+  #main-content.show {
+    opacity: 1;
+  }
+
+  /* Title */
+  #main-content h1 {
+    font-size: 3rem;
+    letter-spacing: 6px;
+    margin-bottom: 30px;
+    text-shadow: 0 0 15px #00ffc8;
+  }
+
+  /* Buttons container */
+  .feature-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    max-width: 800px;
+  }
+
+  /* Buttons */
+  .feature-btn {
+    background: linear-gradient(145deg, #004466, #0077aa);
+    border: 2px solid #00ffc8;
+    border-radius: 14px;
+    padding: 18px 32px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #00ffc8;
+    cursor: pointer;
+    box-shadow:
+      0 0 12px #00ffc8cc,
+      inset 0 0 15px #00ffc8bb;
+    user-select: none;
+    min-width: 180px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+
+  .feature-btn i {
+    font-size: 24px;
+    filter: drop-shadow(0 0 3px #00ffc8aa);
+  }
+
+  .feature-btn:hover {
+    transform: scale(1.05);
+    box-shadow:
+      0 0 25px #00fff0,
+      inset 0 0 20px #00fff0;
+  }
+
+  /* Popup */
+  .popup {
+    position: fixed;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 255, 200, 0.15);
+    backdrop-filter: blur(12px);
+    border: 2px solid #00ffc8;
+    border-radius: 16px;
+    padding: 20px 35px;
+    color: #00ffc8;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 9999;
+    box-shadow:
+      0 0 25px #00ffc8cc,
+      inset 0 0 25px #00ffc8bb;
+    user-select: none;
+  }
+
+  .popup-show {
+    opacity: 1 !important;
+  }
+
+  .popup-close {
+    background: transparent;
+    border: none;
+    color: #00ffc8;
+    font-size: 28px;
+    font-weight: 900;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s ease;
+  }
+
+  .popup-close:hover {
+    color: #00ffa0;
+  }
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div id="loading-screen">
+  <h1>GAME SPACE</h1>
+  <div id="loading-bar-container">
+    <div id="loading-bar"></div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div id="main-content" aria-hidden="true">
+  <h1>Welcome to Game Space</h1>
+  <div class="feature-buttons">
+    <button class="feature-btn" data-message="Fixing lag for smooth gameplay...">
+      <i class="fas fa-tachometer-alt"></i> Fix Lag
+    </button>
+    <button class="feature-btn" data-message="Boosting FPS for better visuals...">
+      <i class="fas fa-rocket"></i> Boost FPS
+    </button>
+    <button class="feature-btn" data-message="Optimizing network stability...">
+      <i class="fas fa-signal"></i> Stabilize Network
+    </button>
+    <button class="feature-btn" data-message="Reducing background heat generation...">
+      <i class="fas fa-temperature-low"></i> Reduce Heat
+    </button>
+    <button class="feature-btn" data-message="Enhancing battery efficiency...">
+      <i class="fas fa-battery-half"></i> Battery Saver
+    </button>
+  </div>
+</div>
+<script>// Show popup function
+    function showPopup(message, duration = 3500) {
+      const existingPopup = document.querySelector('.popup');
+      if (existingPopup) existingPopup.remove();
+
+      const popup = document.createElement('div');
+      popup.classList.add('popup');
+
+      const text = document.createElement('span');
+      text.textContent = message;
+      popup.appendChild(text);
+
+      const closeBtn = document.createElement('button');
+      closeBtn.textContent = '×';
+      closeBtn.classList.add('popup-close');
+      popup.appendChild(closeBtn);
+
+      document.body.appendChild(popup);
+
+      setTimeout(() => popup.classList.add('popup-show'), 10);
+      closeBtn.addEventListener('click', () => {
+        popup.classList.remove('popup-show');
+        setTimeout(() => popup.remove(), 400);
+      });
+
+      setTimeout(() => {
+        if (document.body.contains(popup)) {
+          popup.classList.remove('popup-show');
+          setTimeout(() => popup.remove(), 400);
+        }
+      }, duration);
+    }
+
+    window.onload = () => {
+      const loadingScreen = document.getElementById('loading-screen');
+      const mainContent = document.getElementById('main-content');
+
+      // Sembunyikan loading, tampilkan fitur
+      setTimeout(() => {
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+          loadingScreen.style.display = 'none';
+          mainContent.setAttribute('aria-hidden', 'false');
+          mainContent.classList.add('show');
+          document.body.style.overflow = 'auto';
+        }, 700);
+      }, 4300);
+
+      // Pasang event tombol
+      document.querySelectorAll('.feature-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.style.transform = 'scale(0.9)';
+          setTimeout(() => btn.style.transform = 'scale(1)', 150);
+          showPopup(btn.getAttribute('data-message'));
+        });
+      });
+    };
+
+</script>
+
+
+</body>
+</html>
